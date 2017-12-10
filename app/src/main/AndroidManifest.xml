@@ -17,8 +17,12 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Main2Activity"
-            android:label="@string/title_activity_main2"
+            android:name=".VingresoPreguntas"
+            android:label="@string/title_activity_vingreso_preguntas"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".VingresoRespuestas"
+            android:label="@string/title_activity_vingreso_respuestas"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
