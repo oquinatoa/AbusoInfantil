@@ -20,6 +20,7 @@ public class VingresoPreguntas extends AppCompatActivity {
     TextView txt_nombre_cuestionario;
     LinearLayout contenedor;
     int num_preguntas;
+    int num_respuestas;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +41,8 @@ public class VingresoPreguntas extends AppCompatActivity {
                 }
                 Intent vingresorespuestas=new Intent(VingresoPreguntas.this,VingresoRespuestas.class);
                 vingresorespuestas.putStringArrayListExtra("arreglo",data);
+                vingresorespuestas.putExtra("txt_nombre_cuestionario",txt_nombre_cuestionario.getText()+"");
+                vingresorespuestas.putExtra("num_respuestas", num_respuestas+"");
                 startActivity(vingresorespuestas);
             }
         });
@@ -53,7 +56,7 @@ public class VingresoPreguntas extends AppCompatActivity {
         Bundle data=getIntent().getExtras();
         String nombre_cuestionario=data.getString("txt_nombre_cuestionario");
         num_preguntas=Integer.parseInt(data.getString("num_preguntas"));
-        int num_respuestas=Integer.parseInt(data.getString("num_respuestas"));
+        num_respuestas=Integer.parseInt(data.getString("num_respuestas"));
         txt_nombre_cuestionario=(TextView)findViewById(R.id.txt_nombre);
         txt_nombre_cuestionario.setText(nombre_cuestionario);
         //generar el ingreso de las preguntas
