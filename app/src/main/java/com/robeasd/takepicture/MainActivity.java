@@ -1,11 +1,15 @@
 package com.robeasd.takepicture;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Build;
@@ -26,6 +30,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 
 import static android.Manifest.permission.CAMERA;
@@ -35,15 +40,16 @@ public class MainActivity extends AppCompatActivity {
 
     private static String APP_DIRECTORY = "MyPictureApp/";
     private static String MEDIA_DIRECTORY = APP_DIRECTORY + "PictureApp";
-
+    public Button but2;
     private final int MY_PERMISSIONS = 100;
     private final int PHOTO_CODE = 200;
     private final int SELECT_PICTURE = 300;
-
-    private ImageView mSetImage;
+    private Uri path;
+    public ImageView mSetImage;
     private Button mOptionButton;
-    private RelativeLayout mRlView;
 
+    private RelativeLayout mRlView;
+    private String stringUri;
     private String mPath;
 
     @Override
@@ -53,7 +59,7 @@ public class MainActivity extends AppCompatActivity {
 
         mSetImage = (ImageView) findViewById(R.id.set_picture);
         mOptionButton = (Button) findViewById(R.id.show_options_button);
-        mRlView = (RelativeLayout) findViewById(R.id.rl_view);
+        but2=(Button)findViewById(R.id.ubica);
 
         if(mayRequestStoragePermission())
             mOptionButton.setEnabled(true);
@@ -68,8 +74,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-    }
 
+
+
+    }
+    public void clickk(View view) {
+        Intent ubic=new Intent(this,LocationActivity2.class);
+        startActivity(ubic);
+
+        Bitmap bmp = ((BitmapDrawable)mSetImage.getDrawable()).getBitmap();
+        Intent intent2=new Intent(this,LocationActivity2.class);
+        intent2.putExtra("img_uri", getImageUri(this,bmp).toString());
+        startActivity(intent2);
+    }
     private boolean mayRequestStoragePermission() {
 
         if(Build.VERSION.SDK_INT < Build.VERSION_CODES.M)
@@ -107,7 +124,7 @@ public class MainActivity extends AppCompatActivity {
                 }else if(option[which] == "Elegir de galeria"){
                     Intent intent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                     intent.setType("image/*");
-                    startActivityForResult(intent.createChooser(intent, "Selecciona app de imagen"), SELECT_PICTURE);
+                    startActivityForResult(Intent.createChooser(intent, "Selecciona app de imagen"), SELECT_PICTURE);
                 }else {
                     dialog.dismiss();
                 }
@@ -166,22 +183,47 @@ public class MainActivity extends AppCompatActivity {
                                 public void onScanCompleted(String path, Uri uri) {
                                     Log.i("ExternalStorage", "Scanned " + path + ":");
                                     Log.i("ExternalStorage", "-> Uri = " + uri);
+
                                 }
                             });
 
 
                     Bitmap bitmap = BitmapFactory.decodeFile(mPath);
+
                     mSetImage.setImageBitmap(bitmap);
+
                     break;
                 case SELECT_PICTURE:
-                    Uri path = data.getData();
+                    path = data.getData();
                     mSetImage.setImageURI(path);
+
+
+
+
                     break;
 
             }
         }
     }
-
+    /*private String getRealPathFromURI(Uri contentURI) {
+        String result;
+        Cursor cursor = getContentResolver().query(contentURI, null, null, null, null);
+        if (cursor == null) { // Source is Dropbox or other similar local file path
+            result = contentURI.getPath();
+        } else {
+            cursor.moveToFirst();
+            int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+            result = cursor.getString(idx);
+            cursor.close();
+        }
+        return result;
+    }*/
+    public Uri getImageUri(Context inContext, Bitmap inImage) {
+        ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+        inImage.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+        String path = MediaStore.Images.Media.insertImage(inContext.getContentResolver(), inImage, "Title", null);
+        return Uri.parse(path);
+    }
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -207,6 +249,7 @@ public class MainActivity extends AppCompatActivity {
                 intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
                 Uri uri = Uri.fromParts("package", getPackageName(), null);
                 intent.setData(uri);
+
                 startActivity(intent);
             }
         });

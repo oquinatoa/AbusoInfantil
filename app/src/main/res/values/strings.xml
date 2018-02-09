@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TakePicture</string>
+    <string name="app_name">Evidencias</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -7,4 +7,16 @@
     <string name="contentDescriptionImagenSet">This is where the picture is going to assign</string>
     <string name="contentDescriptionButtonImage">This is a button with an image that open the camera or galery</string>
     <string name="title_activity_hola">Hola</string>
+
+
+    <string name="longitude_label">Longitud</string>
+    <string name="latitude_label">Latitud</string>
+    <string name="activity_label">Cordenadas GPS</string>
+    <string name="title_activity_location2">LocationActivity2</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
